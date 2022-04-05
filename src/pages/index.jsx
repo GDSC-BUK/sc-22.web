@@ -1,15 +1,20 @@
-import { Box } from "@chakra-ui/react";
+import { Center, Heading, Text } from "@chakra-ui/react";
 import BaseLayout from "../layouts/BaseLayout";
 
 function Index() {
+  let user = "Struckchure";
+
   return (
     <BaseLayout>
-      <Box px="8" py="4">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Officia minima
-        blanditiis quia ullam ut enim pariatur ratione ipsam autem soluta,
-        excepturi repellendus molestias eveniet consectetur tempore sint, eaque
-        quidem ex.
-      </Box>
+      <Center px="8" py="4">
+        <Heading as="p" textAlign="center">
+          Hello{" "}
+          <Text as="span" color="blue.600" textDecoration="underline">
+            {user}
+          </Text>
+          , <br /> Welcome to Recogram
+        </Heading>
+      </Center>
     </BaseLayout>
   );
 }
