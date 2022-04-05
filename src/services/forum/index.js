@@ -1,7 +1,9 @@
 import Client from "../client";
+import Storage from "../storage";
 
 
 const client = new Client("https://sc-22-forum-service.herokuapp.com/api/v1/")
+const storage = new Storage();
 
 
 export default class Forum {
@@ -11,7 +13,8 @@ export default class Forum {
       method: "POST",
       url: "/discussion/",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       },
       data: discussion_data
     })
@@ -32,7 +35,8 @@ export default class Forum {
       method: "PUT",
       url: `/discussion/${discussion_id}/`,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       },
       data: discussion_update_data
     })
@@ -43,7 +47,8 @@ export default class Forum {
       method: "DELETE",
       url: `/discussion/${discussion_id}/`,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       }
     })
   }
@@ -54,7 +59,8 @@ export default class Forum {
       method: "POST",
       url: `/reply/${discussion_id}/new/`,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       },
       data: reply_data
     })
@@ -65,7 +71,8 @@ export default class Forum {
       method: "PUT",
       url: `/reply/${reply_id}/`,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       },
       data: reply_update_data
     })
@@ -86,7 +93,8 @@ export default class Forum {
       method: "DELETE",
       url: `/reply/${reply_id}/`,
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       }
     })
   }

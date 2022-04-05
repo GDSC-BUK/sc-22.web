@@ -1,8 +1,9 @@
 import Client from "../client";
+import Storage from "../storage";
 
 
-const client = new Client("https://sc-22-user-service.herokuapp.com/api/v1/")
-
+const client = new Client("https://sc-22-user-service.herokuapp.com/api/v1/");
+const storage = new Storage();
 
 export default class User {
   login(user_creds) {
@@ -32,7 +33,8 @@ export default class User {
       method: "GET",
       url: "/logout/",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       }
     })
   }
@@ -42,7 +44,8 @@ export default class User {
       method: "GET",
       url: "/profile/",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       }
     })
   }
@@ -52,7 +55,8 @@ export default class User {
       method: "PUT",
       url: "/profile/",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Authorization": `Token ${storage.get("token")}`
       },
       data: user_update_data
     })
