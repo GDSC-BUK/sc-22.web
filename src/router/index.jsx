@@ -1,5 +1,8 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useParams } from "react-router-dom";
+
+import Forum from "../services/forum";
+
 // pages
 import Index from "../pages";
 // auth pages
@@ -12,7 +15,9 @@ import Dashboard from "../pages/Dashboard";
 import Discussion from "../pages/Discussion";
 
 function index() {
-  let id = 12;
+  let { discussion_id } = useParams();
+  const forum_service = new Forum();
+  forum_service.get_discussion(discussion_id);
 
   return (
     <BrowserRouter>
@@ -27,7 +32,7 @@ function index() {
         {/* user pages */}
         <Route path="/create" element={<CreateDiscussion />} />
         <Route path="/dashboard" element={<Dashboard />} />
-        <Route path={`/discussion/${id}`} element={<Discussion />} />
+        <Route path={`/discussion/:discussion_id`} element={<Discussion />} />
       </Routes>
     </BrowserRouter>
   );

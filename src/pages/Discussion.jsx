@@ -1,4 +1,6 @@
-import React from "react";
+import { useQuery } from "react-query";
+import Forum from "../services/forum";
+
 // components
 import { Button, Center, chakra, Input, Text, VStack } from "@chakra-ui/react";
 import { MdSend } from "react-icons/md";
@@ -28,6 +30,14 @@ export default function Discussion() {
     ],
   };
 
+  let discussion_id;
+
+  const forum_service = new Forum();
+  const query = useQuery(
+    "discussion",
+    forum_service.get_discussion(discussion_id)
+  );
+
   return (
     <BaseLayout>
       <Center>
@@ -44,10 +54,10 @@ export default function Discussion() {
         >
           {/* post title */}
           <Text fontWeight="semibold" fontSize="xl">
-            {discussion.postTitle}
+            {query.data?.data.title}
           </Text>
           {/* post body */}
-          <Text>{discussion.content}</Text>
+          <Text>{query.body}</Text>
           {/* replies section */}
           <VStack
             as="ul"
