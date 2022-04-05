@@ -1,4 +1,4 @@
-import { Link as PropLink } from "react-router-dom";
+import { Link as PropLink, useNavigate } from "react-router-dom";
 
 // chakra components
 import {
@@ -26,13 +26,17 @@ import { useMutation } from "react-query";
 import User from "../../services/user";
 
 export default function SignIn() {
-  // Mutations
-
+  const navigate = useNavigate();
   const user_service = new User();
 
   const mutation = useMutation(user_service.login, {
-    onSuccess: () => {
+    onSuccess: (res) => {
       alert("Login successful");
+      localStorage.setItem("token", res.data?.token);
+      navigate("/dashboard");
+    },
+    onError: (err) => {
+      alert(err);
     },
   });
 
@@ -53,7 +57,7 @@ export default function SignIn() {
                 type="text"
                 placeholder="Enter your Username"
                 value={username}
-                onChange={({ value }) => {
+                onChange={({ target: { value } }) => {
                   set_username(value);
                 }}
               />
@@ -64,7 +68,7 @@ export default function SignIn() {
                 type="password"
                 placeholder="Type your password"
                 value={password}
-                onChange={({ value }) => {
+                onChange={({ target: { value } }) => {
                   set_password(value);
                 }}
               />
