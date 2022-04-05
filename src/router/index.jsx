@@ -9,8 +9,11 @@ import SignUp from "../pages/auth/SignUp";
 // user pages
 import CreateDiscussion from "../pages/createDiscussion";
 import Dashboard from "../pages/Dashboard";
+import Discussion from "../pages/Discussion";
 
 function index() {
+  let id = 12;
+
   return (
     <BrowserRouter>
       <Routes>
@@ -24,6 +27,7 @@ function index() {
         {/* user pages */}
         <Route path="/create" element={<CreateDiscussion />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path={`/discussion/${id}`} element={<Discussion />} />
       </Routes>
     </BrowserRouter>
   );
