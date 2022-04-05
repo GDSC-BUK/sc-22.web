@@ -20,6 +20,16 @@ export default class Forum {
     })
   }
 
+  get_all_discussions() {
+    return client.send_request({
+      method: "GET",
+      url: `/discussion/`,
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+  }
+
   get_discussion(discussion_id) {
     return client.send_request({
       method: "GET",

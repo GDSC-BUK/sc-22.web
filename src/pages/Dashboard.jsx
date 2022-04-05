@@ -16,6 +16,8 @@ import {
 
 // layouts
 import BaseLayout from "../layouts/BaseLayout";
+import { useQuery } from "react-query";
+import Forum from "../services/forum";
 
 let id = 12;
 
@@ -70,6 +72,9 @@ const replies = [
 ];
 
 export default function Dashboard() {
+  const forum_service = new Forum();
+  const query = useQuery("discussions", forum_service.get_all_discussions);
+
   return (
     <BaseLayout>
       <Box w="full">
@@ -102,11 +107,11 @@ export default function Dashboard() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {discuss.map((discussed) => (
+                {query.data?.data.map((discussion) => (
                   <VStack
                     as={ALink}
-                    to={discussed.link}
-                    key={discussed.id}
+                    to={discussion.id}
+                    key={discussion.id}
                     spacing="2"
                     justifyContent="justify-start"
                     placeItems="start"
@@ -116,8 +121,8 @@ export default function Dashboard() {
                     py="4"
                     mb="2"
                   >
-                    <Text fontWeight="semibold">{discussed.title}</Text>
-                    <Text noOfLines={2}>{discussed.descr}</Text>
+                    <Text fontWeight="semibold">{discussion.title}</Text>
+                    <Text noOfLines={2}>{discussion.body}</Text>
                   </VStack>
                 ))}
               </TabPanel>

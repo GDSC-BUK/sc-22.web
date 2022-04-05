@@ -1,4 +1,4 @@
-import { Link as PropLink } from "react-router-dom";
+import { Link as PropLink, useNavigate } from "react-router-dom";
 
 // chakra components
 import {
@@ -20,8 +20,29 @@ import { MdLock } from "react-icons/md";
 
 // layout
 import BaseLayout from "../../layouts/BaseLayout";
+import { useState } from "react";
+import { useMutation } from "react-query";
+
+import User from "../../services/user";
 
 export default function SignIn() {
+  const navigate = useNavigate();
+  const user_service = new User();
+
+  const mutation = useMutation(user_service.login, {
+    onSuccess: (res) => {
+      alert("Login successful");
+      localStorage.setItem("token", res.data?.token);
+      navigate("/dashboard");
+    },
+    onError: (err) => {
+      alert(err);
+    },
+  });
+
+  const [username, set_username] = useState("");
+  const [password, set_password] = useState("");
+
   return (
     <BaseLayout>
       <Center as="main" w="100vw" p="8" bg="gray.50">
@@ -32,13 +53,36 @@ export default function SignIn() {
           <chakra.form>
             <InputGroup pb="6">
               <InputLeftAddon children={<FaUser />} />
-              <Input type="text" placeholder="Enter your Username" />
+              <Input
+                type="text"
+                placeholder="Enter your Username"
+                value={username}
+                onChange={({ target: { value } }) => {
+                  set_username(value);
+                }}
+              />
             </InputGroup>
             <InputGroup pb="6">
               <InputLeftAddon children={<MdLock />} />
-              <Input type="password" placeholder="Type your password" />
+              <Input
+                type="password"
+                placeholder="Type your password"
+                value={password}
+                onChange={({ target: { value } }) => {
+                  set_password(value);
+                }}
+              />
             </InputGroup>
-            <Button w="full" colorScheme="blue">
+            <Button
+              w="full"
+              colorScheme="blue"
+              onClick={() => {
+                mutation.mutate({
+                  username,
+                  password,
+                });
+              }}
+            >
               Login
             </Button>
           </chakra.form>
