@@ -2,8 +2,7 @@ import React from "react";
 import { QueryClientProvider, QueryClient } from "react-query";
 
 import Router from "./router";
-
-const queryClient = new QueryClient();
+import { queryClient } from "./query";
 
 function App() {
   return (

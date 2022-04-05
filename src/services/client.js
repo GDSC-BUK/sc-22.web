@@ -6,10 +6,10 @@ export default class Client {
     axios.defaults.xsrfHeaderName = "X-CSRFToken";
     axios.defaults.responseEncoding = "utf8";
 
-    api = axios.create({});
+    this.api = axios.create({});
   }
 
-  send_request(props) {
+  send_request(...props) {
     return this.api(...props)
   }
 }

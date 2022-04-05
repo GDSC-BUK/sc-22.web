@@ -20,8 +20,25 @@ import { MdLock } from "react-icons/md";
 
 // layout
 import BaseLayout from "../../layouts/BaseLayout";
+import { useState } from "react";
+import { useMutation } from "react-query";
+
+import User from "../../services/user";
 
 export default function SignIn() {
+  // Mutations
+
+  const user_service = new User();
+
+  const mutation = useMutation(user_service.login, {
+    onSuccess: () => {
+      alert("Login successful");
+    },
+  });
+
+  const [username, set_username] = useState("");
+  const [password, set_password] = useState("");
+
   return (
     <BaseLayout>
       <Center as="main" w="100vw" p="8" bg="gray.50">
@@ -32,13 +49,36 @@ export default function SignIn() {
           <chakra.form>
             <InputGroup pb="6">
               <InputLeftAddon children={<FaUser />} />
-              <Input type="text" placeholder="Enter your Username" />
+              <Input
+                type="text"
+                placeholder="Enter your Username"
+                value={username}
+                onChange={({ value }) => {
+                  set_username(value);
+                }}
+              />
             </InputGroup>
             <InputGroup pb="6">
               <InputLeftAddon children={<MdLock />} />
-              <Input type="password" placeholder="Type your password" />
+              <Input
+                type="password"
+                placeholder="Type your password"
+                value={password}
+                onChange={({ value }) => {
+                  set_password(value);
+                }}
+              />
             </InputGroup>
-            <Button w="full" colorScheme="blue">
+            <Button
+              w="full"
+              colorScheme="blue"
+              onClick={() => {
+                mutation.mutate({
+                  username,
+                  password,
+                });
+              }}
+            >
               Login
             </Button>
           </chakra.form>
