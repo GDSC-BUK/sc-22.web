@@ -1,6 +1,7 @@
 // components
 import { Button, Center, chakra, Input, Textarea } from "@chakra-ui/react";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery } from "react-query";
 
 // layout
@@ -9,6 +10,8 @@ import User from "../services/user";
 import Forum from "../services/forum";
 
 export default function createDiscussion() {
+  const navigate = useNavigate();
+
   const [title, set_title] = useState("");
   const [body, set_body] = useState("");
 
@@ -20,13 +23,16 @@ export default function createDiscussion() {
   const mutation = useMutation(forum_service.start_discussion, {
     onSuccess: (res) => {
       alert("Discussion added");
+      navigate("/dashboard");
     },
     onError: (err) => {
       alert(err);
     },
   });
 
-  const __create_discussion = () => {
+  const __create_discussion = (e) => {
+    e.preventDefault();
+
     mutation.mutate({
       title,
       body,
@@ -54,6 +60,7 @@ export default function createDiscussion() {
             }}
           />
           <Button
+            type="submit"
             colorScheme="blue"
             w="full"
             mt="4"

@@ -19,43 +19,12 @@ import BaseLayout from "../layouts/BaseLayout";
 import { useQuery } from "react-query";
 import Forum from "../services/forum";
 
-let id = 12;
-
-// replies data
-const replies = [
-  {
-    id: 1,
-    postTitle: "Mo needi changi",
-    link: `/discussion/${id}`,
-    reply:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, officiis.",
-  },
-  {
-    id: 2,
-    postTitle: "Mo needi changi",
-    link: `/discussion/${id}`,
-    reply:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, officiis.",
-  },
-  {
-    id: 3,
-    postTitle: "Mo needi changi",
-    link: `/discussion/${id}`,
-    reply:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, officiis.",
-  },
-  {
-    id: 4,
-    postTitle: "Mo needi changi",
-    link: `/discussion/${id}`,
-    reply:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim, officiis.",
-  },
-];
-
 export default function Dashboard() {
   const forum_service = new Forum();
-  const query = useQuery("discussions", forum_service.get_all_discussions);
+  const { data, isLoading } = useQuery(
+    "discussions",
+    forum_service.get_all_discussions
+  );
 
   return (
     <BaseLayout>
@@ -88,24 +57,30 @@ export default function Dashboard() {
             </TabList>
             <TabPanels>
               <TabPanel>
-                {query.data?.data.map((discussion) => (
-                  <VStack
-                    as={ALink}
-                    to={`/discussion/${discussion.id}`}
-                    key={discussion.id}
-                    spacing="2"
-                    justifyContent="justify-start"
-                    placeItems="start"
-                    border="1px solid #999"
-                    borderRadius="lg"
-                    px="6"
-                    py="4"
-                    mb="2"
-                  >
-                    <Text fontWeight="semibold">{discussion.title}</Text>
-                    <Text noOfLines={2}>{discussion.body}</Text>
-                  </VStack>
-                ))}
+                {data?.data.map((discussion) =>
+                  isLoading ? (
+                    "discussions are loading"
+                  ) : (
+                    <>
+                      <VStack
+                        as={ALink}
+                        to={`/discussion/${discussion.id}`}
+                        key={discussion.id}
+                        spacing="2"
+                        justifyContent="justify-start"
+                        placeItems="start"
+                        border="1px solid #999"
+                        borderRadius="lg"
+                        px="6"
+                        py="4"
+                        mb="2"
+                      >
+                        <Text fontWeight="semibold">{discussion.title}</Text>
+                        <Text noOfLines={2}>{discussion.body}</Text>
+                      </VStack>
+                    </>
+                  )
+                )}
               </TabPanel>
             </TabPanels>
           </Tabs>

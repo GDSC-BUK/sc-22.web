@@ -1,6 +1,8 @@
-import { useQuery } from "react-query";
+import { Link as ALink, useNavigate } from "react-router-dom";
+import { useQuery, useMutation } from "react-query";
 import Forum from "../services/forum";
-import React from "react";
+import User from "../services/user";
+import { useState } from "react";
 // components
 import { Button, Center, chakra, Input, Text, VStack } from "@chakra-ui/react";
 import { MdSend } from "react-icons/md";
@@ -9,38 +11,49 @@ import { MdSend } from "react-icons/md";
 import BaseLayout from "../layouts/BaseLayout";
 
 export default function Discussion() {
-  // dummy data for discussion
-  const discussion = {
-    postTitle: "lorem ipsum",
-    content:
-      "Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aut architecto excepturi repudiandae, asperiores ipsam veniam perferendis ratione cum corrupti quod!",
-    reply: [
-      {
-        id: 1,
-        comment: "lorem ipsum dolr sit amet, consectetur adipisicing elit",
-      },
-      {
-        id: 2,
-        comment: "lorem ipsum dolr sit amet, consectetur adipisicing elit",
-      },
-      {
-        id: 3,
-        comment: "lorem ipsum dolr sit amet, consectetur adipisicing elit",
-      },
-    ],
-  };
-
-  let discussion_id;
-
+  // get the url
+  const currentPathName = window.location.href;
+  // get the id
+  let current = currentPathName.slice(33);
+  // pass it to react query to render it
   const forum_service = new Forum();
-  const query = useQuery(
-    "discussion",
-    forum_service.get_discussion(discussion_id)
+  const user_service = new User();
+  const { data } = useQuery(["discussion", current], () =>
+    forum_service.get_discussion(current)
   );
+
+  const query = useQuery("profile", user_service.get_profile);
+
+  const navigate = useNavigate();
+
+  const mutationDelete = useMutation(forum_service.delete_discussion, {
+    onSuccess: () => {
+      alert("Successful deleted post");
+      navigate("/dashboard");
+    },
+    onError: (err) => {
+      alert(err);
+    },
+  });
+
+  const mutation = useMutation(forum_service.reply_to_discussion, {
+    onSuccess: () => {
+      alert("Successfuly replied");
+      // navigate("/dashboard");
+    },
+    onError: (err) => {
+      alert(err);
+    },
+  });
+
+  const [body, set_body] = useState("");
 
   return (
     <BaseLayout>
       <Center>
+        <Button as={ALink} to="/dashboard">
+          Go back
+        </Button>
         <VStack
           spacing="2"
           justifyContent="justify-start"
@@ -53,11 +66,12 @@ export default function Discussion() {
           maxW="30rem"
         >
           {/* post title */}
+          {/* {discuss} */}
           <Text fontWeight="semibold" fontSize="xl">
-            {query.data?.data.title}
+            {data?.data.title}
           </Text>
           {/* post body */}
-          <Text>{query.data?.data.body}</Text>
+          <Text>{data?.data.body}</Text>
           {/* replies section */}
           <VStack
             as="ul"
@@ -74,9 +88,9 @@ export default function Discussion() {
             <Text fontWeight={"semibold"}>Replies:</Text>
 
             {/* comment list */}
-            {discussion.reply.map((replies) => (
-              <Text as="li" key={replies.id}>
-                {replies.comment}
+            {data?.data.replies.map((reply) => (
+              <Text as="li" key={reply.id}>
+                {reply.body}
               </Text>
             ))}
 
@@ -86,12 +100,39 @@ export default function Discussion() {
               justifyContent="justify-between"
               w="full"
             >
-              <Input placeholder="Comment Your Reply" mr="4" />
-              <Button colorScheme="blue" rightIcon={<MdSend />}>
+              <Input
+                placeholder="Comment Your Reply"
+                mr="4"
+                value={body}
+                onChange={({ target: { value } }) => {
+                  set_body(value);
+                }}
+              />
+              <Button
+                colorScheme="blue"
+                rightIcon={<MdSend />}
+                onClick={(e) => {
+                  e.preventDefault();
+
+                  mutation.mutate({
+                    current,
+                    body,
+                    user_id: query?.data.data.id,
+                  });
+                }}
+              >
                 Reply
               </Button>
             </chakra.form>
           </VStack>
+          <Button
+            colorScheme={"red"}
+            onClick={() => {
+              mutationDelete.mutate(current);
+            }}
+          >
+            Delete Post
+          </Button>
         </VStack>
       </Center>
     </BaseLayout>

@@ -1,4 +1,10 @@
+// utilities or sth
+import { useEffect } from "react";
+import { useQuery } from "react-query";
 import { Link as PropLink } from "react-router-dom";
+import User from "../services/user";
+
+// Components
 import {
   Button,
   Center,
@@ -12,6 +18,9 @@ import { MdLogin } from "react-icons/md";
 
 export default function BaseLayout({ children }) {
   document.title = "Recogram";
+
+  const user_service = new User();
+  const { data } = useQuery("profile", user_service.get_profile);
 
   return (
     <>
@@ -32,11 +41,12 @@ export default function BaseLayout({ children }) {
         <Spacer />
         <Button
           as={PropLink}
-          to="/login"
+          to="login"
+          // to={data.data.username ? "/logout" : "/login"}
           colorScheme="blue"
           rightIcon={<MdLogin />}
         >
-          Login
+          {/* {data.data.username ? "Logout" : "Login"} */}
         </Button>
       </HStack>
       {children}

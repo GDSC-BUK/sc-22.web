@@ -1,4 +1,6 @@
 import { Link as PropLink } from "react-router-dom";
+import { useState } from "react";
+import { useMutation } from "react-query";
 
 // chakra components
 import {
@@ -20,8 +22,6 @@ import { MdLock } from "react-icons/md";
 
 // layout
 import BaseLayout from "../../layouts/BaseLayout";
-import { useState } from "react";
-import { useMutation } from "react-query";
 
 import User from "../../services/user";
 
