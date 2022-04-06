@@ -21,24 +21,6 @@ import Forum from "../services/forum";
 
 let id = 12;
 
-// discussion data
-const discuss = [
-  {
-    id: 1,
-    title: "I need funds",
-    link: `/discussion/${id}`,
-    descr:
-      "I needs funds to get a new laptop and a new phone which is very urgent as my current laptop keeps and hanging and my phone camera is spoilt",
-  },
-  {
-    id: 2,
-    title: "I need Job",
-    link: `/discussion/${id}`,
-    descr:
-      "I just feel like workking with people sha, if you see any job that is sha frontend , hala me, I know all frameworks you can think of, angular, svelte, react, vue, alpine, preact, ionic, blitz, next, gatsby, remix and so on sha",
-  },
-];
-
 // replies data
 const replies = [
   {
@@ -102,15 +84,14 @@ export default function Dashboard() {
             w="96"
           >
             <TabList>
-              <Tab _focus={{ outline: "none" }}>Discussion</Tab>
-              <Tab _focus={{ outline: "none" }}>Replies</Tab>
+              <Tab _focus={{ outline: "none" }}>Discussions</Tab>
             </TabList>
             <TabPanels>
               <TabPanel>
                 {query.data?.data.map((discussion) => (
                   <VStack
                     as={ALink}
-                    to={discussion.id}
+                    to={`/discussion/${discussion.id}`}
                     key={discussion.id}
                     spacing="2"
                     justifyContent="justify-start"
@@ -123,26 +104,6 @@ export default function Dashboard() {
                   >
                     <Text fontWeight="semibold">{discussion.title}</Text>
                     <Text noOfLines={2}>{discussion.body}</Text>
-                  </VStack>
-                ))}
-              </TabPanel>
-              <TabPanel>
-                {replies.map((reply) => (
-                  <VStack
-                    as={ALink}
-                    to={reply.link}
-                    key={reply.id}
-                    spacing="2"
-                    justifyContent="justify-start"
-                    placeItems="start"
-                    border="1px solid #999"
-                    borderRadius="lg"
-                    px="6"
-                    py="4"
-                    mb="2"
-                  >
-                    <Text fontWeight="semibold">{reply.postTitle}</Text>
-                    <Text noOfLines={2}>{reply.reply}</Text>
                   </VStack>
                 ))}
               </TabPanel>
