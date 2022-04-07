@@ -120,8 +120,7 @@ export default function Discussion() {
                 onClick={(e) => {
                   e.preventDefault();
 
-                  mutation.mutate({
-                    current,
+                  mutation.mutate(current, {
                     body,
                     user_id: query?.data.data.id,
                   });
