@@ -49,6 +49,10 @@ export default function Discussion() {
     },
   });
 
+  const __reply_to_discussion = (discussion_id, reply_data) => {
+    mutation.mutate(discussion_id, reply_data)
+  }
+
   const [body, set_body] = useState("");
 
   return (
@@ -120,7 +124,7 @@ export default function Discussion() {
                 onClick={(e) => {
                   e.preventDefault();
 
-                  mutation.mutate(current, {
+                  __reply_to_discussion(current, {
                     body,
                     user_id: query?.data.data.id,
                   });
