@@ -64,7 +64,7 @@ export default class Forum {
   }
 
   // reply
-  reply_to_discussion(discussion_id, reply_data) {
+  reply_to_discussion({discussion_id, reply_data}) {
     return client.send_request({
       method: "POST",
       url: `/reply/${discussion_id}/new/`,
