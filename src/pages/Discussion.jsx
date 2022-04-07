@@ -1,4 +1,4 @@
-import { Link as ALink, useNavigate } from "react-router-dom";
+import { Link as ALink, useNavigate, useLocation } from "react-router-dom";
 import { useQuery, useMutation } from "react-query";
 import Forum from "../services/forum";
 import User from "../services/user";
@@ -11,17 +11,20 @@ import { MdSend } from "react-icons/md";
 import BaseLayout from "../layouts/BaseLayout";
 
 export default function Discussion() {
-  // get the url
-  const currentPathName = window.location.href;
-  // get the id
-  let current = currentPathName.slice(33);
-  // pass it to react query to render it
+  // get page url
+  const location = useLocation();
+
+  // get the current page id
+  const current = location.pathname.slice(12);
+
+  // pass it to react query to get discussion details
   const forum_service = new Forum();
-  const user_service = new User();
-  const { data } = useQuery(["discussion", current], () =>
+  const { data, isLoading } = useQuery(["discussion", current], () =>
     forum_service.get_discussion(current)
   );
 
+  // get user profile
+  const user_service = new User();
   const query = useQuery("profile", user_service.get_profile);
 
   const navigate = useNavigate();
@@ -65,6 +68,9 @@ export default function Discussion() {
           my="10"
           maxW="30rem"
         >
+          {/* loading state */}
+          {isLoading ? "" : "please wait while post is loading"}
+
           {/* post title */}
           {/* {discuss} */}
           <Text fontWeight="semibold" fontSize="xl">
