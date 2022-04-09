@@ -29,7 +29,7 @@ export default function BaseLayout({ children }) {
 
   return (
     <>
-      <HStack as="header" px="8" py="4" boxShadow="md">
+      <HStack as="header" px="8" py="4">
         <Link
           as={PropLink}
           to="/"
@@ -41,7 +41,7 @@ export default function BaseLayout({ children }) {
           }}
         >
           {" "}
-          <Heading color="blue.600">Recogram</Heading>
+          <Heading color="homepageColor.blue">Recogram</Heading>
         </Link>
         <Spacer />
         {isAuthenticated ? (
