@@ -22,7 +22,6 @@ export default function createDiscussion() {
 
   const mutation = useMutation(forum_service.start_discussion, {
     onSuccess: (res) => {
-      alert("Discussion added");
       navigate("/dashboard");
     },
     onError: (err) => {
@@ -60,6 +59,8 @@ export default function createDiscussion() {
             }}
           />
           <Button
+            isLoading={mutation.isLoading}
+            loadingText="Creating Discussion"
             type="submit"
             colorScheme="blue"
             w="full"

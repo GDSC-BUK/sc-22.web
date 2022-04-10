@@ -1,4 +1,5 @@
-import { Link as ALink } from "react-router-dom";
+import { useEffect } from "react";
+import { Link as ALink, useNavigate } from "react-router-dom";
 
 // components
 import {
@@ -25,6 +26,18 @@ export default function Dashboard() {
     "discussions",
     forum_service.get_all_discussions
   );
+
+  // navigate user to login in page if not authenticated
+  const navigate = useNavigate();
+
+  // get token from localStorage
+  const isAuthenticated = localStorage.getItem("token") ? true : false;
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <BaseLayout>

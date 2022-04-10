@@ -31,7 +31,6 @@ export default function Discussion() {
 
   const mutationDelete = useMutation(forum_service.delete_discussion, {
     onSuccess: () => {
-      alert("Successful deleted post");
       navigate("/dashboard");
     },
     onError: (err) => {
@@ -41,8 +40,7 @@ export default function Discussion() {
 
   const mutation = useMutation(forum_service.reply_to_discussion, {
     onSuccess: () => {
-      alert("Successfuly replied");
-      // navigate("/dashboard");
+      set_body("");
     },
     onError: (err) => {
       alert(err);
@@ -50,8 +48,8 @@ export default function Discussion() {
   });
 
   const __reply_to_discussion = (discussion_id, reply_data) => {
-    mutation.mutate({discussion_id, reply_data})
-  }
+    mutation.mutate({ discussion_id, reply_data });
+  };
 
   const [body, set_body] = useState("");
 
@@ -119,6 +117,8 @@ export default function Discussion() {
                 }}
               />
               <Button
+                isLoading={mutation.isLoading}
+                loadingText="Replying"
                 colorScheme="blue"
                 rightIcon={<MdSend />}
                 onClick={(e) => {
@@ -135,6 +135,8 @@ export default function Discussion() {
             </chakra.form>
           </VStack>
           <Button
+            isLoading={mutationDelete.isLoading}
+            loadingText="Deleting"
             colorScheme={"red"}
             onClick={() => {
               mutationDelete.mutate(current);
